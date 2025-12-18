@@ -80,12 +80,28 @@ The official package registry for the **Fin programming language**. A modern, fa
 
 ### Deployment
 
+#### Frontend (Cloudflare Pages)
 The project is configured for automatic deployment via Cloudflare Pages:
 
 1. Connect this GitHub repo to Cloudflare Pages
-2. Set build command: `npm run build`
-3. Set build output: `dist`
-4. Deploy!
+2. Set project name to `cloud` (for URL: `https://cloud.registryfin.workers.dev`)
+3. Set build command: `npm run build`
+4. Set build output: `dist`
+5. Deploy!
+
+#### Backend (Cloudflare Workers)
+Deploy the worker manually through Cloudflare Workers dashboard:
+
+1. Go to [Cloudflare Workers](https://dash.cloudflare.com/workers-and-pages)
+2. Create new Worker
+3. Copy the built worker code from `dist/worker.js`
+4. Set environment variables:
+   - `GITHUB_CLIENT_ID`
+   - `GITHUB_CLIENT_SECRET`
+   - `APP_URL` = `https://cloud.registryfin.workers.dev`
+   - `finn_db` = Your D1 database ID
+
+5. Set up routing to proxy API calls (`/api/*`) to your worker
 
 ## 📦 Package Publishing
 

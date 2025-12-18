@@ -6,16 +6,13 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc -b && vite build",
+		"build:worker": "esbuild worker/index.ts --bundle --outfile=dist/worker.js --format=esm --platform=node",
 		"lint": "eslint .",
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"test:ui": "vitest --ui",
 		"typecheck": "tsc --noEmit",
-		"preview": "npm run build && vite preview",
-		"deploy": "npm run build && wrangler deploy",
-		"db:migrate": "wrangler d1 execute finn-db --file=./schema.sql --local",
-		"db:migrate:remote": "wrangler d1 execute finn-db --file=./schema.sql --remote",
-		"cf-typegen": "wrangler types"
+		"preview": "npm run build && vite preview"
 	},
 	"dependencies": {
 		"@iarna/toml": "^3.0.0",
@@ -27,17 +24,16 @@
 		"react-router-dom": "^7.11.0"
 	},
 	"devDependencies": {
-		"@cloudflare/vite-plugin": "^1.18.0",
 		"@cloudflare/vitest-pool-workers": "^0.11.1",
 		"@eslint/js": "^9.33.0",
 		"@tailwindcss/postcss": "^4.1.18",
 		"@testing-library/dom": "^10.4.1",
 		"@testing-library/jest-dom": "^6.9.1",
 		"@testing-library/react": "^16.3.1",
-		"@types/react": "^19.2.7",
 		"@types/react-dom": "^19.2.3",
 		"@vitejs/plugin-react": "^5.1.2",
 		"autoprefixer": "^10.4.23",
+		"esbuild": "^0.24.0",
 		"eslint": "^9.33.0",
 		"eslint-plugin-react-hooks": "^5.2.0",
 		"eslint-plugin-react-refresh": "^0.4.20",
@@ -48,7 +44,6 @@
 		"typescript": "~5.8.3",
 		"typescript-eslint": "^8.39.1",
 		"vite": "^7.3.0",
-		"vitest": "^3.2.4",
-		"wrangler": "^4.55.0"
+		"vitest": "^3.2.4"
 	}
 }

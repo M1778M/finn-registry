@@ -1,9 +1,20 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-import { cloudflare } from "@cloudflare/vite-plugin";
-
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), cloudflare()],
+  plugins: [react()],
+  build: {
+    rollupOptions: {
+      input: {
+        main: './index.html',
+        worker: './worker/index.ts'
+      },
+      output: {
+        entryFileNames: (chunkInfo) => {
+          return chunkInfo.name === 'worker' ? 'worker.js' : 'assets/[name]-[hash].js'
+        }
+      }
+    }
+  }
 })
