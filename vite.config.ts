@@ -9,14 +9,9 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     rollupOptions: {
-      input: {
-        main: './index.html',
-        worker: './worker/index.ts'
-      },
+      input: './index.html', // Only build the main app for Pages
       output: {
-        entryFileNames: (chunkInfo) => {
-          return chunkInfo.name === 'worker' ? 'worker.js' : 'assets/[name]-[hash].js'
-        }
+        entryFileNames: 'assets/[name]-[hash].js'
       }
     }
   }
