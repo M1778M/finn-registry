@@ -1,69 +1,191 @@
-# React + TypeScript + Vite
+# Finn Registry
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/M1778M/finn-registry)
 
-Currently, two official plugins are available:
+The official package registry for the **Fin programming language**. A modern, fast, and secure platform for discovering, publishing, and managing Fin packages.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## Expanding the ESLint configuration
+- 🚀 **Fast & Modern**: Built with React, TypeScript, and Cloudflare Workers
+- 🔐 **Secure Authentication**: GitHub OAuth with session management
+- 📦 **Package Management**: Full CRUD operations for Fin packages
+- 📄 **TOML Validation**: Server-side parsing and validation of `finn.toml` files
+- 📖 **README Rendering**: Automatic README fetching and caching from GitHub
+- 📊 **Download Tracking**: Real-time download statistics and analytics
+- 🎨 **Modern UI**: Polished interface with dark theme and smooth animations
+- 🔍 **Search & Discovery**: Full-text search with filtering capabilities
+- 🧪 **Comprehensive Testing**: 68+ tests covering all functionality
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🏗️ Architecture
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Frontend**: React + Vite + TypeScript + Tailwind CSS
+- **Backend**: Hono framework on Cloudflare Workers
+- **Database**: Cloudflare D1 (SQLite)
+- **Authentication**: GitHub OAuth with httpOnly cookies
+- **Deployment**: Cloudflare Pages with GitHub integration
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## 🚀 Quick Start
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Prerequisites
+
+- Node.js 20+
+- GitHub account (for OAuth)
+- Cloudflare account
+
+### Local Development
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/M1778M/finn-registry.git
+   cd finn-registry
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment:**
+   ```bash
+   cp .env.example .env.local
+   # Edit .env.local with your GitHub OAuth credentials
+   ```
+
+4. **Set up database:**
+   ```bash
+   npm run db:migrate
+   npm run db:migrate:remote  # For production
+   ```
+
+5. **Start development server:**
+   ```bash
+   npm run dev
+   ```
+
+6. **Add test data (optional):**
+   ```bash
+   npx wrangler d1 execute finn-db --file=./test-data.sql --local
+   ```
+
+### GitHub OAuth Setup
+
+1. Create a GitHub OAuth App at [GitHub Developer Settings](https://github.com/settings/developers)
+2. Set **Homepage URL** to your domain (e.g., `https://your-registry.com`)
+3. Set **Authorization callback URL** to `https://your-registry.com/api/auth/callback`
+4. Add the Client ID and Secret to Cloudflare:
+   ```bash
+   wrangler secret put GITHUB_CLIENT_ID
+   wrangler secret put GITHUB_CLIENT_SECRET
+   ```
+
+### Deployment
+
+The project is configured for automatic deployment via Cloudflare Pages:
+
+1. Connect this GitHub repo to Cloudflare Pages
+2. Set build command: `npm run build`
+3. Set build output: `dist`
+4. Deploy!
+
+## 📦 Package Publishing
+
+### For Package Authors
+
+1. **Create a `finn.toml` file** in your repository:
+   ```toml
+   [project]
+   name = "my_package"
+   version = "1.0.0"
+   entrypoint = "lib.fin"
+   description = "A useful Fin package"
+   repository = "https://github.com/username/my_package"
+   license = "MIT"
+
+   [packages]
+   std = "std"
+   ```
+
+2. **Publish via the web interface:**
+   - Sign in with GitHub
+   - Go to Account → Publish Version
+   - Upload your `finn.toml` file
+   - Add version details and changelog
+
+3. **Publish via CLI** (future feature):
+   ```bash
+   finn publish
+   ```
+
+### Package Structure Requirements
+
+- **Name**: Lowercase alphanumeric + underscores/dashes
+- **Version**: Strict semantic versioning (X.Y.Z)
+- **Entrypoint**: `lib.fin` (library) or `main.fin` (binary)
+- **Repository**: Must be a valid GitHub URL
+- **README**: Optional but recommended in repository root
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run with UI
+npm run test:ui
+
+# Type checking
+npm run typecheck
+
+# Linting
+npm run lint
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📊 API Endpoints
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Authentication
+- `GET /api/auth/github` - Initiate GitHub OAuth
+- `GET /api/auth/callback` - OAuth callback
+- `GET /api/auth/me` - Get current user
+- `POST /api/auth/logout` - Logout
+- `POST /api/auth/token/regenerate` - Regenerate API token
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Packages
+- `GET /api/packages` - List all packages
+- `GET /api/packages/:name` - Get package details
+- `POST /api/packages` - Create package
+- `POST /api/packages/:name/versions` - Publish version
+- `DELETE /api/packages/:name` - Delete package
+
+### Search & Discovery
+- `GET /api/search` - Search packages
+- `GET /api/stats` - Registry statistics
+
+### Documentation
+- `GET /api/packages/:name/readme` - Get package README
+- `GET /api/users/:username` - Get user profile
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [Fin Programming Language](https://github.com/fin-lang/fin)
+- [Cloudflare Workers](https://workers.cloudflare.com/)
+- [Hono Framework](https://hono.dev/)
+- [React](https://reactjs.org/)
+
+---
+
+Built with ❤️ for the Fin community
