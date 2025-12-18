@@ -7,8 +7,10 @@
 		"dev": "vite",
 		"build": "tsc -b && vite build",
 		"build:worker": "esbuild worker/index.ts --bundle --outfile=dist/worker.js --format=esm --platform=node",
-		"build:pages": "npm run build",
-		"deploy": "npm run build:pages",
+		"deploy": "npm run build && wrangler deploy",
+		"db:migrate": "wrangler d1 execute finn-db --file=./schema.sql --local",
+		"db:migrate:remote": "wrangler d1 execute finn-db --file=./schema.sql --remote",
+		"cf-typegen": "wrangler types",
 		"lint": "eslint .",
 		"test": "vitest run",
 		"test:watch": "vitest",
@@ -46,6 +48,7 @@
 		"typescript": "~5.8.3",
 		"typescript-eslint": "^8.39.1",
 		"vite": "^7.3.0",
-		"vitest": "^3.2.4"
+		"vitest": "^3.2.4",
+		"wrangler": "^4.56.0"
 	}
 }

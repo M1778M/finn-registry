@@ -1,0 +1,31 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "finn-registry",
+	"main": "worker/index.ts",
+	"compatibility_date": "2025-12-17",
+	"compatibility_flags": ["nodejs_compat"],
+	"assets": {
+                 "directory": "dist",
+                 "not_found_handling": "single-page-application"
+         },
+	"observability": {
+		"enabled": true
+	},
+	// Environment variables for GitHub OAuth
+	// Set these using: wrangler secret put GITHUB_CLIENT_SECRET
+	"vars": {
+		"GITHUB_CLIENT_ID": "YOUR_GITHUB_CLIENT_ID",
+		"APP_URL": "https://registry.fin-lang.workers.dev"
+	},
+	"d1_databases": [
+		{
+			"binding": "finn_db",
+			"database_name": "finn-db",
+			"database_id": "ca424f2f-b31d-44cb-bec2-f0b1ddf8a408"
+		}
+	]
+}
