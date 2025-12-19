@@ -17,6 +17,9 @@ CREATE TABLE IF NOT EXISTS sessions (
     user_id INTEGER NOT NULL,
     expires_at INTEGER NOT NULL,
     created_at INTEGER DEFAULT (unixepoch()),
+    user_agent TEXT,
+    ip_address TEXT,
+    login_time INTEGER,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 

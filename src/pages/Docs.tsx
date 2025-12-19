@@ -35,6 +35,10 @@ export default function Docs() {
     { id: 'configuration', label: 'Configuration', icon: Terminal },
   ]
 
+  const currentIndex = sections.findIndex(section => section.id === activeSection)
+  const prevSection = currentIndex > 0 ? sections[currentIndex - 1] : null
+  const nextSection = currentIndex < sections.length - 1 ? sections[currentIndex + 1] : null
+
   return (
     <div className="flex gap-12">
       {/* Sidebar */}
@@ -142,12 +146,27 @@ cd finn
 make install`} />
               </div>
 
-              <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-                <h3 className="font-bold text-lg mb-3">Verify Installation</h3>
-                <p className="text-zinc-400 mb-4">After installation, verify that Finn is working:</p>
-                <CodeBlock code={`finn --version
-# finn 0.1.0`} />
-              </div>
+               <div>
+                 <h2 className="text-2xl font-bold mb-4">Example Fin Code</h2>
+                 <p className="text-zinc-400 mb-4">A simple Fin program using imported packages:</p>
+                 <CodeBlock code={`import "std" as std;
+import "http" as http;
+
+struct UserData {
+    name <string>,
+    age <int>
+}
+
+fun main() <noret> {
+    let user <UserData> = UserData{name: "Alice", age: 30};
+
+    printf("Hello, %s! You are %d years old.\n",
+           user.name, user.age);
+
+    let response <auto> = http.get("https://api.example.com/user");
+    printf("API Response: %s\n", response.body);
+}`} language="fin" />
+               </div>
             </div>
           </div>
         )}
@@ -162,45 +181,45 @@ make install`} />
             </div>
 
             <div className="space-y-6">
-              <div>
-                <h2 className="text-2xl font-bold mb-4">Adding Packages</h2>
-                <p className="text-zinc-400 mb-4">Add a package to your project:</p>
-                <CodeBlock code="finn add std" />
-                <p className="text-zinc-400 mt-4 mb-4">Add a specific version:</p>
-                <CodeBlock code="finn add http@1.2.0" />
-              </div>
+               <div>
+                 <h2 className="text-2xl font-bold mb-4">Adding Packages</h2>
+                 <p className="text-zinc-400 mb-4">Add a package to your project:</p>
+                 <CodeBlock code="finn add std" />
+                 <p className="text-zinc-400 mt-4 mb-4">Add a specific version:</p>
+                 <CodeBlock code="finn add http@1.2.0" />
+               </div>
 
-              <div>
-                <h2 className="text-2xl font-bold mb-4">Removing Packages</h2>
-                <p className="text-zinc-400 mb-4">Remove a package from your project:</p>
-                <CodeBlock code="finn remove http" />
-              </div>
+               <div>
+                 <h2 className="text-2xl font-bold mb-4">Removing Packages</h2>
+                 <p className="text-zinc-400 mb-4">Remove a package from your project:</p>
+                 <CodeBlock code="finn remove http" />
+               </div>
 
-              <div>
-                <h2 className="text-2xl font-bold mb-4">Updating Packages</h2>
-                <p className="text-zinc-400 mb-4">Update all packages to their latest versions:</p>
-                <CodeBlock code="finn update" />
-                <p className="text-zinc-400 mt-4 mb-4">Update a specific package:</p>
-                <CodeBlock code="finn update std" />
-              </div>
+               <div>
+                 <h2 className="text-2xl font-bold mb-4">Updating Packages</h2>
+                 <p className="text-zinc-400 mb-4">Update all packages to their latest versions:</p>
+                 <CodeBlock code="finn update" />
+                 <p className="text-zinc-400 mt-4 mb-4">Update a specific package:</p>
+                 <CodeBlock code="finn update std" />
+               </div>
 
-              <div>
-                <h2 className="text-2xl font-bold mb-4">Listing Packages</h2>
-                <p className="text-zinc-400 mb-4">List all installed packages:</p>
-                <CodeBlock code="finn list" />
-              </div>
+               <div>
+                 <h2 className="text-2xl font-bold mb-4">Listing Packages</h2>
+                 <p className="text-zinc-400 mb-4">List all installed packages:</p>
+                 <CodeBlock code="finn list" />
+               </div>
 
-              <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-                <h3 className="font-bold text-lg mb-3">Import in Code</h3>
-                <p className="text-zinc-400 mb-4">Use installed packages in your Fin code:</p>
-                <CodeBlock code={`import std.io
-import http.client
+               <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+                 <h3 className="font-bold text-lg mb-3">Import in Code</h3>
+                 <p className="text-zinc-400 mb-4">Use installed packages in your Fin code:</p>
+                 <CodeBlock code={`import "std" as std;
+import "http" as http;
 
-fn main() {
-    let response = http.get("https://api.example.com")
-    io.println(response.body)
+fun main() <noret> {
+    let response <auto> = http.get("https://api.example.com");
+    printf("%s\n", response.body);
 }`} language="fin" />
-              </div>
+               </div>
             </div>
           </div>
         )}
@@ -215,18 +234,20 @@ fn main() {
             </div>
 
             <div className="space-y-6">
-              <div>
-                <h2 className="text-2xl font-bold mb-4">1. Create a finn.toml</h2>
-                <p className="text-zinc-400 mb-4">Every package needs a manifest file:</p>
-                <CodeBlock code={`[package]
+               <div>
+                 <h2 className="text-2xl font-bold mb-4">1. Create a finn.toml</h2>
+                 <p className="text-zinc-400 mb-4">Every package needs a manifest file:</p>
+                 <CodeBlock code={`[project]
 name = "my-package"
 version = "1.0.0"
+entrypoint = "lib.fin"
 description = "A helpful description"
 repository = "https://github.com/username/my-package"
+license = "MIT"
 
-[dependencies]
-std = "^1.0"`} language="toml" />
-              </div>
+[packages]
+std = "std"`} language="toml" />
+               </div>
 
               <div>
                 <h2 className="text-2xl font-bold mb-4">2. Login to Finn</h2>
@@ -267,21 +288,17 @@ std = "^1.0"`} language="toml" />
               <div>
                 <h2 className="text-2xl font-bold mb-4">finn.toml Reference</h2>
                 <p className="text-zinc-400 mb-4">Complete configuration options:</p>
-                <CodeBlock code={`[package]
+                 <CodeBlock code={`[project]
 name = "my-package"          # Required: Package name
 version = "1.0.0"            # Required: Semantic version
+entrypoint = "lib.fin"       # Required: lib.fin or main.fin
 description = "Description"  # Optional: Short description
 repository = "https://..."   # Required: Git repository URL
 license = "MIT"              # Optional: SPDX license identifier
-authors = ["Name <email>"]   # Optional: Package authors
 
-[dependencies]
-std = "^1.0"                 # Caret: Compatible versions
-http = "~1.2.0"              # Tilde: Patch updates only
-json = "1.0.0"               # Exact: Specific version
-
-[dev-dependencies]
-test = "^1.0"                # Development-only dependencies`} language="toml" />
+[packages]
+std = "std"                  # Package dependencies
+http = "http"                # Direct package references`} language="toml" />
               </div>
 
               <div>
@@ -307,6 +324,56 @@ retries = 3`} language="toml" />
                   <li><code className="bg-zinc-800 px-2 py-1 rounded text-indigo-400">FINN_CACHE_DIR</code> - Cache directory path</li>
                 </ul>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        {(prevSection || nextSection) && (
+          <div className="flex justify-between items-center pt-8 mt-8 border-t border-zinc-800">
+            <div>
+              {prevSection && (
+                <button
+                  onClick={() => setActiveSection(prevSection.id as Section)}
+                  className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors group"
+                >
+                  <ChevronRight size={16} className="rotate-180" />
+                  <div className="text-left">
+                    <div className="text-xs text-zinc-500 uppercase tracking-widest">Previous</div>
+                    <div className="font-medium group-hover:text-indigo-400 transition-colors">{prevSection.label}</div>
+                  </div>
+                </button>
+              )}
+            </div>
+
+            <div className="flex gap-1">
+              {sections.map((section) => (
+                <button
+                  key={section.id}
+                  onClick={() => setActiveSection(section.id as Section)}
+                  className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                    section.id === activeSection
+                      ? 'bg-indigo-400 scale-125'
+                      : 'bg-zinc-600 hover:bg-zinc-500'
+                  }`}
+                  title={section.label}
+                />
+              ))}
+            </div>
+
+            <div>
+              {nextSection && (
+                <button
+                  onClick={() => setActiveSection(nextSection.id as Section)}
+                  className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors group"
+                >
+                  <div className="text-right">
+                    <div className="text-xs text-zinc-500 uppercase tracking-widest">Next</div>
+                    <div className="font-medium group-hover:text-indigo-400 transition-colors">{nextSection.label}</div>
+                  </div>
+                  <ChevronRight size={16} />
+                </button>
+              )}
             </div>
           </div>
         )}

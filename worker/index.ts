@@ -225,13 +225,16 @@ app.get('/api/auth/callback', async (c) => {
       return c.redirect('/?error=user_creation_failed');
     }
 
-    // Create session
+    // Create session with metadata
     const sessionId = generateSessionId();
     const expiresAt = Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60); // 30 days
+    const userAgent = c.req.header('User-Agent') || 'Unknown';
+    const ipAddress = c.req.header('CF-Connecting-IP') || c.req.header('X-Forwarded-For') || 'Unknown';
+    const loginTime = Math.floor(Date.now() / 1000);
 
     await c.env.finn_db.prepare(
-      "INSERT INTO sessions (id, user_id, expires_at) VALUES (?, ?, ?)"
-    ).bind(sessionId, user.id, expiresAt).run();
+      "INSERT INTO sessions (id, user_id, expires_at, user_agent, ip_address, login_time) VALUES (?, ?, ?, ?, ?, ?)"
+    ).bind(sessionId, user.id, expiresAt, userAgent, ipAddress, loginTime).run();
 
     // Set session cookie
     setCookie(c, 'finn_session', sessionId, {

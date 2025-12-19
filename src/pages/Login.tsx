@@ -66,11 +66,11 @@ export default function Login() {
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
           <button
             onClick={login}
-            className="w-full flex items-center justify-center gap-3 bg-white hover:bg-zinc-100 text-black font-semibold py-3.5 px-6 rounded-xl transition group"
+            className="w-full flex items-center justify-center gap-3 bg-gray-900 hover:bg-gray-800 border border-gray-700 text-white font-semibold py-3.5 px-6 rounded-xl transition-all duration-200 group shadow-lg hover:shadow-xl"
           >
-            <Github size={22} />
+            <Github size={22} className="text-gray-300 group-hover:text-white transition-colors" />
             Continue with GitHub
-            <ArrowRight size={18} className="opacity-0 -ml-2 group-hover:opacity-100 group-hover:ml-0 transition-all" />
+            <ArrowRight size={18} className="opacity-0 -ml-2 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
           </button>
 
           <div className="mt-6 pt-6 border-t border-zinc-800">

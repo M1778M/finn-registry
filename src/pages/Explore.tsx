@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Package, Download, Search, Filter, TrendingUp, Clock } from 'lucide-react'
+import CustomDropdown from '../components/CustomDropdown'
 
 interface PackageData {
   name: string
@@ -85,17 +86,18 @@ export default function Explore() {
           />
         </div>
         
-        <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-xl px-4">
+        <div className="flex items-center gap-2">
           <Filter size={18} className="text-zinc-500" />
-          <select
+          <CustomDropdown
+            options={[
+              { value: 'downloads', label: 'Most Downloads' },
+              { value: 'newest', label: 'Newest' },
+              { value: 'name', label: 'Name (A-Z)' }
+            ]}
             value={sortBy}
-            onChange={e => setSortBy(e.target.value as SortOption)}
-            className="bg-transparent text-zinc-300 py-3 pr-8 focus:outline-none cursor-pointer"
-          >
-            <option value="downloads">Most Downloads</option>
-            <option value="newest">Newest</option>
-            <option value="name">Name (A-Z)</option>
-          </select>
+            onChange={(value) => setSortBy(value as SortOption)}
+            className="flex-1"
+          />
         </div>
       </div>
 

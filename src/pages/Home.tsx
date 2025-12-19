@@ -56,7 +56,7 @@ export default function Home() {
         </p>
         
         <div className="flex gap-4 justify-center items-center">
-          <Link to="/docs" className="bg-white text-black px-8 py-3 rounded-lg font-semibold transition flex items-center gap-2">
+          <Link to="/docs" className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl hover:shadow-indigo-500/25 transform hover:scale-105">
             Get Started <ArrowRight size={18} />
           </Link>
           <div className="bg-zinc-800 border border-zinc-700 px-6 py-3 rounded-lg font-mono text-sm text-gray-300 flex items-center gap-3 select-all cursor-pointer hover:border-zinc-600 transition">
@@ -93,10 +93,10 @@ export default function Home() {
       {/* Search Bar */}
       <div className="w-full max-w-2xl relative z-10">
         <div className="relative">
-          <div className="bg-zinc-900 rounded-lg flex items-center px-6 border border-zinc-700 focus-within:border-zinc-600 transition">
+          <div className="bg-zinc-900 rounded-lg flex items-center px-6 border border-zinc-700 focus-within:border-zinc-500/60 focus-within:ring-2 focus-within:ring-zinc-400/20 transition-all duration-200">
             <Search className="text-gray-500" size={24} />
-            <input 
-              type="text" 
+            <input
+              type="text"
               className="w-full bg-transparent border-none focus:ring-0 text-white p-5 text-lg placeholder:text-gray-600 outline-none"
               placeholder="Search packages..."
               value={query}
