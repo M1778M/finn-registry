@@ -31,4 +31,19 @@ dist-ssr
 !.env.example
 
 
+# Next.js
+/.next/
+/out/
+
+# Production
+/build/
+
+# Misc
+.DS_Store
+*.pem
+
+# Database
+*.db
+*.sqlite
+
 .docs/
