@@ -39,16 +39,31 @@ jobs:
       - name: Build application
         run: npm run build
 
-      - name: CI/CD Summary
-        run: |
-          echo "## ✅ CI/CD Complete!" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Tests:** All passed" >> $GITHUB_STEP_SUMMARY
-          echo "- **Linting:** No issues" >> $GITHUB_STEP_SUMMARY
-          echo "- **TypeScript:** No errors" >> $GITHUB_STEP_SUMMARY
-          echo "- **Build:** Successful" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## 🚀 Cloudflare Pages Auto-Deployment:" >> $GITHUB_STEP_SUMMARY
-          echo "- Project: registry" >> $GITHUB_STEP_SUMMARY
-          echo "- URL: https://registry.fin-lang.workers.dev" >> $GITHUB_STEP_SUMMARY
-          echo "- Status: Deploys automatically on code changes" >> $GITHUB_STEP_SUMMARY
+  # Deploy to Cloudflare (only on main branch)
+  deploy:
+    name: Deploy
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Deploy to Cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
